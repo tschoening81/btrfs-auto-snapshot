@@ -47,6 +47,9 @@ snaps::_calc_dir_name() {
   printf '%s' "${snap_name}"
 }
 
+##
+# Either excute or only log the given command, depending on the current {@code dry-run}-settings.
+#
 snaps::_exec_if() {
   if [[ "${ARGS['snaps.dry-run']}" -eq 1 ]]; then
     log::dry_run "${@}"

@@ -45,41 +45,40 @@ declare -r  ARG_LABEL="${1:?No label given.}"
 declare -r  APP_BIN='/opt/btrfs/auto-snap/app/btrfs-auto-snapshot'
 declare -ra APP_EXEC=(
   "${APP_BIN}"
-  "--label=${ARG_LABEL}"
-  '--syslog'
-  '--verbose'
+  '--log-level=info'
+  "--snaps.label=${ARG_LABEL}"
 )
 
 exec::_freqly() {
-  "${APP_EXEC[@]}" '--keep=4' '//'
+  "${APP_EXEC[@]}" '--snaps.keep=4' -- '//'
 }
 
 exec::_hourly() {
   # 365 means ~14 days.
-  "${APP_EXEC[@]}" '--keep=365' '//'
+  "${APP_EXEC[@]}" '--snaps.keep=365' -- '//'
 }
 
 exec::_daily() {
-  "${APP_EXEC[@]}" '--keep=90'  '/'
-  "${APP_EXEC[@]}" '--keep=365' '/home'
-  "${APP_EXEC[@]}" '--keep=365' '/home/foobar'
+  "${APP_EXEC[@]}" '--snaps.keep=90'  -- '/'
+  "${APP_EXEC[@]}" '--snaps.keep=365' -- '/home'
+  "${APP_EXEC[@]}" '--snaps.keep=365' -- '/home/foobar'
 }
 
 exec::_weekly() {
-  "${APP_EXEC[@]}" '--keep=15'  '/'
-  "${APP_EXEC[@]}" '--keep=52' '/home'
-  "${APP_EXEC[@]}" '--keep=52' '/home/foobar'
+  "${APP_EXEC[@]}" '--snaps.keep=15' -- '/'
+  "${APP_EXEC[@]}" '--snaps.keep=52' -- '/home'
+  "${APP_EXEC[@]}" '--snaps.keep=52' -- '/home/foobar'
 }
 
 exec::_monthly() {
-  "${APP_EXEC[@]}" '--keep=3'  '/'
-  "${APP_EXEC[@]}" '--keep=12' '/home'
-  "${APP_EXEC[@]}" '--keep=12' '/home/foobar'
+  "${APP_EXEC[@]}" '--snaps.keep=3'  -- '/'
+  "${APP_EXEC[@]}" '--snaps.keep=12' -- '/home'
+  "${APP_EXEC[@]}" '--snaps.keep=12' -- '/home/foobar'
 }
 
 exec::_yearly() {
-  "${APP_EXEC[@]}" '--keep=5' '/home'
-  "${APP_EXEC[@]}" '--keep=5' '/home/foobar'
+  "${APP_EXEC[@]}" '--snaps.keep=5' -- '/home'
+  "${APP_EXEC[@]}" '--snaps.keep=5' -- '/home/foobar'
 }
 
 "exec::_${ARG_LABEL}"
