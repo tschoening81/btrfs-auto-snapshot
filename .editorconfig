@@ -1,0 +1,26 @@
+root = true
+
+[.editorconfig]
+charset                  = utf-8
+end_of_line              = lf
+indent_size              = 4
+indent_style             = tab
+insert_final_newline     = true
+tab_width                = 4
+trim_trailing_whitespace = true
+
+[*]
+charset                  = utf-8
+end_of_line              = lf
+insert_final_newline     = true
+trim_trailing_whitespace = true
+
+[*.{bash,sh}]
+indent_size  = 2
+indent_style = space
+tab_width    = 2
+
+[btrfs-auto-snapshot]
+indent_size  = 2
+indent_style = space
+tab_width    = 2

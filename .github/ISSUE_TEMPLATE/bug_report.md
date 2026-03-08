@@ -6,7 +6,6 @@ labels: bug
 assignees: ''
 
 ---
-
 **Describe the bug**
 A clear and concise description of what the bug is.
 
@@ -22,7 +21,7 @@ A clear and concise description of what you expected to happen.
 
 **Additional context**
 ```
-btrfs subvolume list /
+btrfs subvolume list '/'
 grep 'btrfs' '/proc/mounts'
 mount
 ```
