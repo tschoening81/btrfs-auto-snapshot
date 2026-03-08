@@ -27,6 +27,29 @@ main() {
   # TODO Add support for // by checking if that is the path to support, calculate all paths and process like explicitly
   #   given. Don't validate given paths too much to not need to care too much about different BTRFS layouts. Try to use
   #   mounted dirs as much as possible?
+  #
+  # btrfs filesystem show --mounted shows all BTRFS filesystems, but without a path
+  #   * check device in mount table for path mounted on
+  #   * use path as input for subvolume list
+  #
+  # root@c-h730:/home# btrfs filesystem show --mounted
+  # Label: none  uuid: fc662f68-4750-4856-a91a-cc8f7b7744e3
+  #      Total devices 1 FS bytes used 494.64GiB
+  #      devid    1 size 1.81TiB used 517.02GiB path /dev/sda7
+  #
+  # Instead of btrfs subvolume list -o like in the past -a with all BTRFS filesystems only?
+  #   * filesystems calced based on mountpoints, but really only independent filesystem paths of interest
+  #   * -a for all those file systems and then retrieve individual subvols which are not snaps, e.g. no .btrfs/+
+  #   * don't care about individual mountpoints at all any more -> root BTRFS file systems are mounted
+  #
+  # root@c-h730:/home# btrfs subvolume list --sort=path -a /
+  # ID 2576 gen 21629 top level 5 path .btrfs/btrfs-auto-snap_daily_2026-01-01-1520
+  # ID 2582 gen 21633 top level 256 path <FS_TREE>/home/.btrfs/btrfs-auto-snap_daily_2026-01-01-1520
+  # ID 5017 gen 40083 top level 256 path <FS_TREE>/home/foobar
+  # ID 256 gen 40129 top level 5 path home
+  # root@c-h730:/home#
+  #
+  # https://lore.kernel.org/linux-btrfs/c015f1943def5e892b0aac540d1ce5a3d143ed6b.1718995160.git.osandov@fb.com/
 }
 
 main "${@}"
