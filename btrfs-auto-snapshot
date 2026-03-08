@@ -31,6 +31,8 @@ main() {
   # btrfs filesystem show --mounted shows all BTRFS filesystems, but without a path
   #   * check device in mount table for path mounted on
   #   * use path as input for subvolume list
+  #   * others mount and list subvols as well -> https://unix.stackexchange.com/questions/193619/list-all-btrfs-filesystems-and-subvolumes-in-shell
+  #   * We only care about somewhat mounted stuff anyway, don't we?
   #
   # root@c-h730:/home# btrfs filesystem show --mounted
   # Label: none  uuid: fc662f68-4750-4856-a91a-cc8f7b7744e3
