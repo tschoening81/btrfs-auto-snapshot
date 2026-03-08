@@ -22,11 +22,33 @@ fi
 # shellcheck source=SCRIPTDIR/logging.bash
 source "$(dirname "${BASH_SOURCE[0]}" | xargs -d'\n' readlink -f -n | xargs -d'\n' printf '%s/logging.bash' || true)"
 
-# shellcheck source=SCRIPTDIR/paths.bash
-source "$(dirname "${BASH_SOURCE[0]}" | xargs -d'\n' readlink -f -n | xargs -d'\n' printf '%s/paths.bash' || true)"
-
 # shellcheck source=SCRIPTDIR/vars.bash
 source "$(dirname "${BASH_SOURCE[0]}" | xargs -d'\n' readlink -f -n | xargs -d'\n' printf '%s/vars.bash' || true)"
+
+##
+# Validate the given path to make sense to be given as commandline arguments.
+#
+# * {@code //} and some explicitly given paths must not be mixed.
+# * Given explicit paths need to exist.
+#
+# @param[in] Callers need to forward each individual path as individual argument.
+# @return    A newline seperated version of the given paths, if they are valid at all.
+#
+args::_validate_paths() {
+  for path in "${@}"; do
+    if [[ "${path}" == '//' ]] && [[ "${#}" -ne 1 ]]; then
+      log::error "'${path}' must not be mixed with explicit given ones."
+      exit "${ERR_ARG_WRONG_VALUE}"
+    fi
+
+    if [[ "${path}" != '//' ]] && [[ ! -d "${path}" ]]; then
+      log::error "Given path doesn't exist: '${path}'"
+      exit "${ERR_ARG_WRONG_VALUE}"
+    fi
+  done
+
+  printf '%s\n' "${@}"
+}
 
 ##
 # Parse and store everything given at the commandline.
@@ -76,7 +98,7 @@ args::parse() {
             ARGS['snaps.prefix']="${parsed[(( ++i ))]}"
         ;;
         (--)
-            ARGS['snaps.paths']="$(paths::validate_as_args "${parsed[@]:(( ++i ))}")"
+            ARGS['snaps.paths']="$(args::_validate_paths "${parsed[@]:(( ++i ))}")"
             break
         ;;
         (*)
