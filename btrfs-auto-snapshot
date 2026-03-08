@@ -3,8 +3,6 @@
 ##
 # Automatically create, rotate and destroy BTRFS snapshots.
 #
-# TODO Document @param[in] here like in my other scripts or prefer some auto-generated usage based in ARGS-hash?
-#
 
 set -o errexit
 set -o errtrace
@@ -16,8 +14,19 @@ set -o pipefail
 # shellcheck source=SCRIPTDIR/inc/args.bash
 source "$(dirname "${0}" | xargs -d'\n' readlink -f -n | xargs -d'\n' printf '%s/inc/args.bash' || true)"
 
+# shellcheck source=SCRIPTDIR/inc/snaps.bash
+source "$(dirname "${0}" | xargs -d'\n' readlink -f -n | xargs -d'\n' printf '%s/inc/snaps.bash' || true)"
+
 main() {
   args::parse "${@}"
+  args::print_usage_and_exit_if
+
+  snaps::do "${ARGS['snaps.paths']}"
+  snaps::rm "${ARGS['snaps.paths']}"
+
+  # TODO Add support for // by checking if that is the path to support, calculate all paths and process like explicitly
+  #   given. Don't validate given paths too much to not need to care too much about different BTRFS layouts. Try to use
+  #   mounted dirs as much as possible?
 }
 
 main "${@}"

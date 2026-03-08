@@ -40,10 +40,10 @@ log::_impl() {
   local -r arg_level="${1:?No invocation log level given.}"
   local -r arg_prio="${2:?No logger priority given.}"
 
-  # Method call args shouldn't be forwarded as actual log message.
+  # Method call args shouldn't be forwarded as part of the actual log message.
   shift ; shift
 
-  local -r call_level_dec="${LOG_LEVELS[${arg_level}]}"
+  local -r call_level_dec="${LOG_LEVELS["${arg_level}"]}"
   local -r cmd_level_dec="${LOG_LEVELS[${ARGS['log.level']}]}"
 
   [[ "${call_level_dec}" -lt "${cmd_level_dec}" ]] && return "${ERR_SUCCESS}"
@@ -55,6 +55,16 @@ log::_impl() {
 
 log::debug() {
   log::_impl 'debug' 'debug' "${@}"
+}
+
+##
+# Print the entire given arguments as {@code debug} without checking any currently configured log level.
+#
+# This use-case seems to be special enough currently to have a custom method, while at the same time we don't need to
+# check and porribly override log-levels configured at the commandline this way.
+#
+log::dry_run() {
+  logger -t "${ARGS['log.prefix']}" -p "daemon.debug" -- "${*}"
 }
 
 log::info() {

@@ -1,5 +1,5 @@
 ##
-# Path handling.
+# Utilities regarding path handling.
 #
 
 [[ "${_SRC_GUARD_PATHS:-0}" != '0' ]] && return 0

@@ -39,15 +39,13 @@ declare -Ax ARGS=(
   ['snaps.dry-run']='0'
   ['snaps.keep']='1'
   ['snaps.label']='adhoc'
-  ['snaps.writeable']='-r'
+  ['snaps.name-fmt']='btrfs-auto-snap_%s_%s'
   ['snaps.paths']=''
-  ['snaps.prefix']='btrfs-auto-snap'
+  ['snaps.writeable']='-r'
 )
 
 declare -rax ARGS_SPEC=(
   'help'
   'log.level:' 'log.prefix:'
-  'snaps.dry-run' 'snaps.keep:' 'snaps.label:' 'snaps.writable' 'snaps.paths:' 'snaps.prefix'
+  'snaps.dry-run::' 'snaps.keep:' 'snaps.label:' snaps.name-fmt:' 'snaps.paths:' ''snaps.writable::'
 )
-
-declare -rx SNAPS_DIR='.btrfs'

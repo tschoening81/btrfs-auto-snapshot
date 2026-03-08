@@ -86,3 +86,26 @@ args::parse() {
     esac
   done
 }
+
+args::print_usage_and_exit_if() {
+  if [[ "${ARGS[help]}" -eq 0 ]]; then
+    return "${ERR_SUCCESS}"
+  fi
+
+  cat <<EOT
+Usage: ${0} [options] -- <'//' | name [name...]>
+
+--help                                 Print this usage message.
+--log.level=info                       Level to use at runtime, with all log statements for lower levels being ignored.
+--log.prefix=btrfs-auto-snap           Prefix to use when forwarding messages to "logger".
+--snaps.dry-run=0                      If to execute writing BTRFS commands at all or only log them.
+--snaps.keep=1                         How many snapshots to keep within the same label.
+--snaps.label=                         Name to group all snapshots of the same kind, e.g. "hourly".
+--snaps.name-fmt=btrfs-auto-snap_%s_%s Format string for snap directory names, with "%s" being replaced by the label and
+                                       a calculated date time string at runtime.
+--snaps.writeable=-r                   If to create read-only (-r) or writable (empty string) snapshots.
+name                                   Paths to BTRFS subvolumes to snapshot or "//" for all of those.
+EOT
+
+  exit "${ERR_SUCCESS}"
+}
