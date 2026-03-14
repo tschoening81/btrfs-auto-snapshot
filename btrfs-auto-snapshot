@@ -25,67 +25,6 @@ main() {
 
   snaps::do "${ARGS['subvols.paths']}"
   snaps::rm "${ARGS['subvols.paths']}"
-
-  # TODO Add support for // by checking if that is the path to support, calculate all paths and process like explicitly
-  #   given. Don't validate given paths too much to not need to care too much about different BTRFS layouts. Try to use
-  #   mounted dirs as much as possible?
-  #   btrfs::calc_subvols_if -> btrfs::_calc_subvols -> btrfs::_calc_fs
-  #   snaps::do "$(btrfs|snaps::get_paths)" vs. snaps:do + snaps::rm getting paths internally -> snaps::_do+_rm
-  #
-  # btrfs filesystem show --mounted shows all BTRFS filesystems, but without a path
-  #   * check device in mount table for path mounted on
-  #   * use path as input for subvolume list
-  #   * others mount and list subvols as well -> https://unix.stackexchange.com/questions/193619/list-all-btrfs-filesystems-and-subvolumes-in-shell
-  #   * We only care about somewhat mounted stuff anyway, don't we?
-  #
-  # root@c-h730:/home# btrfs filesystem show --mounted
-  # Label: none  uuid: fc662f68-4750-4856-a91a-cc8f7b7744e3
-  #      Total devices 1 FS bytes used 494.64GiB
-  #      devid    1 size 1.81TiB used 517.02GiB path /dev/sda7
-  #
-  # Instead of btrfs subvolume list -o like in the past -a with all BTRFS filesystems only?
-  #   * filesystems calced based on mountpoints, but really only independent filesystem paths of interest
-  #   * -a for all those file systems and then retrieve individual subvols which are not snaps, e.g. no .btrfs/+
-  #   * don't care about individual mountpoints at all any more -> root BTRFS file systems are mounted
-  #
-  # root@c-h730:/home# btrfs subvolume list --sort=path -a /
-  # ID 2576 gen 21629 top level 5 path .btrfs/btrfs-auto-snap_daily_2026-01-01-1520
-  # ID 2582 gen 21633 top level 256 path <FS_TREE>/home/.btrfs/btrfs-auto-snap_daily_2026-01-01-1520
-  # ID 5017 gen 40083 top level 256 path <FS_TREE>/home/foobar
-  # ID 256 gen 40129 top level 5 path home
-  # root@c-h730:/home#
-  #
-  # https://lore.kernel.org/linux-btrfs/c015f1943def5e892b0aac540d1ce5a3d143ed6b.1718995160.git.osandov@fb.com/
-
-  # root@c-h730:/home# ls -lisa /sys/fs/btrfs
-  # total 0
-  # 38868 0 drwxr-xr-x  4 root root 0 Mar  7 11:22 .
-  #     2 0 drwxr-xr-x 11 root root 0 Mar  4 15:33 ..
-  # 45013 0 drwxr-xr-x  7 root root 0 Mar  7 11:22 fc662f68-4750-4856-a91a-cc8f7b7744e3
-  # 38869 0 drwxr-xr-x  2 root root 0 Mar  7 11:22 features
-  # root@c-h730:/home# ls -lisa /sys/fs/btrfs/fc662f68-4750-4856-a91a-cc8f7b7744e3/
-  # total 0
-  # 45013 0 drwxr-xr-x 7 root root    0 Mar  7 11:22 .
-  # 38868 0 drwxr-xr-x 4 root root    0 Mar  7 11:22 ..
-  # 45054 0 drwxr-xr-x 5 root root    0 Mar  7 11:22 allocation
-  # 45053 0 lrwxrwxrwx 1 root root    0 Mar  7 11:22 bdi -> ../../../devices/virtual/bdi/btrfs-1
-  # 45035 0 -rw-r--r-- 1 root root 4096 Mar  7 11:22 bg_reclaim_threshold
-  # 45031 0 -r--r--r-- 1 root root 4096 Mar  7 11:22 checksum
-  # 45028 0 -r--r--r-- 1 root root 4096 Mar  7 11:22 clone_alignment
-  # 45036 0 -rw-r--r-- 1 root root 4096 Mar  7 11:22 commit_stats
-  # 45014 0 drwxr-xr-x 2 root root    0 Mar  7 11:22 devices
-  # 45015 0 drwxr-xr-x 3 root root    0 Mar  7 11:22 devinfo
-  # 45044 0 drwxr-xr-x 2 root root    0 Mar  7 11:22 discard
-  # 45032 0 -r--r--r-- 1 root root 4096 Mar  7 11:22 exclusive_operation
-  # 45038 0 drwxr-xr-x 2 root root    0 Mar  7 11:22 features
-  # 45033 0 -r--r--r-- 1 root root 4096 Mar  7 11:22 generation
-  # 45025 0 -rw-r--r-- 1 root root 4096 Mar  7 11:22 label
-  # 45030 0 -r--r--r-- 1 root root 4096 Mar  7 11:22 metadata_uuid
-  # 45026 0 -r--r--r-- 1 root root 4096 Mar  7 11:22 nodesize
-  # 45029 0 -rw-r--r-- 1 root root 4096 Mar  7 11:22 quota_override
-  # 45034 0 -rw-r--r-- 1 root root 4096 Mar  7 11:22 read_policy
-  # 45027 0 -r--r--r-- 1 root root 4096 Mar  7 11:22 sectorsize
-  # 45037 0 -r--r--r-- 1 root root 4096 Mar  7 11:22 temp_fsid
 }
 
 main "${@}"
