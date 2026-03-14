@@ -73,6 +73,11 @@ log::info() {
 
 log::error() {
   log::_impl 'error' 'err' "${@}"
+
+  # Not sure currently if we want to entirely rely on "logger", and wherever it forwards to, or especially have errors
+  # printed on STDERR as well. The latter might be useful e.g. in case excution is scheduled using CRON, as that might
+  # send helpful mails in case of errors.
+  printf '%s\n' "${*}" >&2
 }
 
 ##
