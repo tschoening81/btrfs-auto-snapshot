@@ -3,6 +3,8 @@
 ##
 # Automatically create, rotate and destroy BTRFS snapshots.
 #
+#
+#
 
 set -o errexit
 set -o errtrace
@@ -21,8 +23,8 @@ main() {
   args::parse "${@}"
   args::print_usage_and_exit_if
 
-  snaps::do "${ARGS['snaps.paths']}"
-  snaps::rm "${ARGS['snaps.paths']}"
+  snaps::do "${ARGS['subvols.paths']}"
+  snaps::rm "${ARGS['subvols.paths']}"
 
   # TODO Add support for // by checking if that is the path to support, calculate all paths and process like explicitly
   #   given. Don't validate given paths too much to not need to care too much about different BTRFS layouts. Try to use

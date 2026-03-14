@@ -98,7 +98,7 @@ args::parse() {
             ARGS['snaps.prefix']="${parsed[(( ++i ))]}"
         ;;
         (--)
-            ARGS['snaps.paths']="$(args::_validate_paths "${parsed[@]:(( ++i ))}")"
+            ARGS['subvols.paths']="$(args::_validate_paths "${parsed[@]:(( ++i ))}")"
             break
         ;;
         (*)
