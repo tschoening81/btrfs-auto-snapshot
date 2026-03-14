@@ -1,4 +1,4 @@
-# BTRFS Automatic snapshot service for Linux
+# BTRFS automatic snapshot service for Linux
 
 `btrfs-auto-snapshot` is a Bash script designed to bring as much of the functionality of the wonderful ZFS snapshot tool
 `zfs-auto-snapshot` to BTRFS as possible. It's similarly designed to get executed by some external scheduler like `cron`
